@@ -7,34 +7,58 @@ import {
   Physics,
   RigidBody,
 } from "@react-three/rapier";
+import { useRef } from "react";
 
 const PhysicsScene = () => {
+  const cubeRef = useRef();
+  const secondCubeRef = useRef();
+  const clickHandler = () => {
+    // cubeRef.current.addForce({ x: 0, y: 0, z: -10 });
+    // cubeRef.current.applyImpulse({ x: 2, y: 7, z: 0 });
+    // cubeRef.current.applyImpulseAtPoint(
+    //   { x: 2, y: 7, z: 0 },
+    //   { x: 2, y: 0, z: 0 }
+    // );
+    // cubeRef.current.addTorque({ x: 0, y: 5, z: 0 });
+    cubeRef.current.applyTorqueImpulse({ x: 0, y: 5, z: 0 });
+  };
+
+  const cubeClickHandler = () => {
+    secondCubeRef.current.applyImpulse({ x: 8, y: 0, z: 0 });
+  };
   return (
     <Physics gravity={[0, -9.81, 0]}>
       <Debug />
-      <RigidBody position={[0, 1.5, 0]} colliders={false}>
-        <CuboidCollider args={[0.5, 0.5, 0.5]} />
-        {/* <CuboidCollider args={[0.25, 0.25, 0.25]} position={[-2, -1, -2.5]} /> */}
-        <mesh castShadow>
+      <RigidBody
+        ref={cubeRef}
+        onCollisionEnter={() => {
+          console.log("colision enter");
+        }}
+        onCollisionExit={() => {
+          console.log("colision exit");
+        }}
+        onSleep={() => {
+          console.log("sleeping");
+        }}
+        onWake={() => {
+          console.log("wake");
+        }}
+        gravityScale={1}
+        restitution={0}
+        friction={0}
+      >
+        <mesh castShadow position={[1.5, 2.5, 0]} onClick={clickHandler}>
           <boxGeometry />
           <meshStandardMaterial color="#CC3941" />
         </mesh>
       </RigidBody>
-      <RigidBody colliders="trimesh">
-        {/* <RigidBody colliders="hull"> */}
-        <mesh position={[-1.5, 1.5, 0]}>
-          <torusKnotGeometry args={[0.5, 0.15, 100, 100]} />
-          <meshBasicMaterial color="orange" />
+      <RigidBody ref={secondCubeRef}>
+        <mesh position={[-1.5, 1.5, 0]} onClick={cubeClickHandler}>
+          <boxGeometry />
+          <meshBasicMaterial color="#CC3941" />
         </mesh>
       </RigidBody>
-      {/* <RigidBody colliders="ball"> */}
-      <RigidBody colliders={false} position={[0, 1.5, -1.5]}>
-        <CapsuleCollider args={[0.375, 0.6]} />
-        <mesh>
-          <sphereGeometry args={[0.75, 64, 64]} />
-          <meshBasicMaterial color="purple" />
-        </mesh>
-      </RigidBody>
+
       <RigidBody type="fixed">
         <mesh position-y={-1} rotation-x={-Math.PI * 0.5} receiveShadow>
           <boxGeometry args={[8, 8, 0.35]} />
