@@ -10,50 +10,31 @@ import {
 import { useRef } from "react";
 
 const PhysicsScene = () => {
-  const cubeRef = useRef();
+  const firstCubeRef = useRef();
   const secondCubeRef = useRef();
-  const clickHandler = () => {
-    // cubeRef.current.addForce({ x: 0, y: 0, z: -10 });
-    // cubeRef.current.applyImpulse({ x: 2, y: 7, z: 0 });
-    // cubeRef.current.applyImpulseAtPoint(
-    //   { x: 2, y: 7, z: 0 },
-    //   { x: 2, y: 0, z: 0 }
-    // );
-    // cubeRef.current.addTorque({ x: 0, y: 5, z: 0 });
-    cubeRef.current.applyTorqueImpulse({ x: 0, y: 5, z: 0 });
+  const firstCubeClickHandler = () => {
+    firstCubeRef.current.applyImpulse({ x: -100, y: 5, z: 0 });
   };
 
-  const cubeClickHandler = () => {
-    secondCubeRef.current.applyImpulse({ x: 8, y: 0, z: 0 });
+  const secondCubeClickHandler = () => {
+    secondCubeRef.current.applyImpulse({ x: 100, y: 0, z: 0 });
   };
   return (
     <Physics gravity={[0, -9.81, 0]}>
       <Debug />
-      <RigidBody
-        ref={cubeRef}
-        onCollisionEnter={() => {
-          console.log("colision enter");
-        }}
-        onCollisionExit={() => {
-          console.log("colision exit");
-        }}
-        onSleep={() => {
-          console.log("sleeping");
-        }}
-        onWake={() => {
-          console.log("wake");
-        }}
-        gravityScale={1}
-        restitution={0}
-        friction={0}
-      >
-        <mesh castShadow position={[1.5, 2.5, 0]} onClick={clickHandler}>
+      <RigidBody ref={firstCubeRef} mass={20}>
+        <mesh
+          castShadow
+          position={[1.5, 2.5, 0]}
+          onClick={firstCubeClickHandler}
+          scale={3}
+        >
           <boxGeometry />
           <meshStandardMaterial color="#CC3941" />
         </mesh>
       </RigidBody>
-      <RigidBody ref={secondCubeRef}>
-        <mesh position={[-1.5, 1.5, 0]} onClick={cubeClickHandler}>
+      <RigidBody ref={secondCubeRef} mass={200}>
+        <mesh position={[-1.5, 1.5, 0]} onClick={secondCubeClickHandler}>
           <boxGeometry />
           <meshBasicMaterial color="#CC3941" />
         </mesh>
