@@ -1,24 +1,27 @@
 import { KeyboardControls, OrbitControls } from "@react-three/drei";
 import PhysicsScene from "./PhysicsScene";
+import Effect from "./Effect";
+import { useRef } from "react";
 
 const Scene = () => {
+  const circleMesh = useRef();
   return (
     <>
       <OrbitControls />
+      <Effect ref={circleMesh} />
+      <mesh position-x={1}>
+        <boxGeometry />
+        <meshBasicMaterial color="orange" />
+      </mesh>
 
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[2, 2, 3]} castShadow />
-      <KeyboardControls
-        map={[
-          { name: "forward", keys: ["ArrowUp", "KeyW"] },
-          { name: "backward", keys: ["ArrowDown", "KeyS"] },
-          { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
-          { name: "rightward", keys: ["ArrowRight", "KeyD"] },
-          { name: "jump", keys: ["Space"] },
-        ]}
-      >
-        <PhysicsScene />
-      </KeyboardControls>
+      <mesh position-x={-1}>
+        <boxGeometry />
+        <meshBasicMaterial color="rgb(106,115,180)" />
+      </mesh>
+      <mesh position-z={-12} ref={circleMesh}>
+        <circleGeometry args={[7, 64]} />
+        <meshBasicMaterial color="orange" />
+      </mesh>
     </>
   );
 };

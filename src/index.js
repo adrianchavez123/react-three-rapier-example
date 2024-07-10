@@ -15,7 +15,9 @@ root.render(
         position: [3, 3, 7],
       }}
     >
+      {/* <color args={["#ffffff"]} attach="background"> */}
       <Scene />
+      {/* </color> */}
     </Canvas>
   </>
 );
